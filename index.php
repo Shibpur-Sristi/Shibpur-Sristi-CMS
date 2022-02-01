@@ -3,13 +3,6 @@
 
 <head>
     <?php include './includes/head.php'; ?>
-    <script>
-    auth.onAuthStateChanged(user => {
-        if (user) {} else {
-            window.location = "login.php"
-        }
-    })
-    </script>
 </head>
 
 <body>
@@ -97,6 +90,12 @@
             $('#udvaban-count').html('-');
             // $('#projects').html(setProjects(projects));
         })
+
+    auth.onAuthStateChanged(user => {
+        if (user) {} else {
+            window.location = "login.php"
+        }
+    })
     </script>
 </body>
 
