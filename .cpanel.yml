@@ -3,4 +3,8 @@ deployment:
   tasks:
     - export DEPLOYPATH=/home1/shibpmpw/cms.shibpursristi.org/
     - /bin/cp * $DEPLOYPATH
-    - /bin/cp -R * $DEPLOYPATH
+    - /bin/cp -R api $DEPLOYPATH
+    - /bin/cp -R css $DEPLOYPATH
+    - /bin/cp -R images $DEPLOYPATH
+    - /bin/cp -R includes $DEPLOYPATH
+    - /bin/cp -R js $DEPLOYPATH
