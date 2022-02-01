@@ -1,0 +1,266 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300&display=swap');
+
+:root {
+  --bg-primary: #FFFFFF;
+  --primary: #167CBC;
+  --secondary: #262F36;
+  --text-primary: #202A30;
+  --text-secondary: #707070;
+}
+
+body {
+    background-color: var(--bg-primary);
+    font-family: 'Poppins', sans-serif;
+    width:100vw;
+    overflow-x: hidden;
+}
+
+.header {
+  text-align: center;
+  font-size: 2rem;
+  margin: 0 auto;
+  padding: 5px;
+  width: 300px;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.card {
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgb(0 0 0 / 20%);
+}
+
+.card .card-title {
+  font-weight: 600
+}
+
+.btn-primary {
+  background-color: var(--primary);
+  color: #FFFFFF;
+  padding: 0.75rem 1.5rem;
+  border-radius: 100px;
+  box-shadow: 0 2px 10px rgb(0 0 0 / 35%);
+  font-family: 'Poppins', sans-serif;
+  border: none;
+  cursor: pointer;
+}
+
+.icon i {
+  font-size: 5rem;
+  padding: 5rem 0 2.5rem 0;
+}
+
+
+body::-webkit-scrollbar {
+  width: 0.25rem;
+}
+
+body::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+
+body::-webkit-scrollbar-thumb {
+  background: var(--text-secondary);
+}
+
+main {
+  margin-left: 16rem;
+  padding: 1rem;
+}
+
+.navbar {
+  position: fixed;
+  background-color: var(--secondary);
+  transition: width 600ms ease;
+  /* overflow: scroll; */
+  z-index: 100;
+}
+
+.navbar-nav {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  margin-left: -13px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+}
+.nav-item {
+  width: 100%;
+  left: -10px!important;
+}
+
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  height: 5rem;
+  color: #FFFFFF;
+  text-decoration: none;
+  /* filter: grayscale(100%) opacity(1); */
+  transition: var(--transition-speed);
+}
+
+.nav-link:hover {
+  filter: grayscale(0%) opacity(1);
+  background: #1d252b;
+  color: var(--text-secondary);
+}
+
+.link-text {
+  display: inline;
+  margin-left: 1rem;
+}
+
+.nav-link i {
+  width: 2rem;
+  min-width: 2rem;
+  margin: 0 1.5rem;
+  padding: 1.15rem 0;
+}
+
+.nav-link img {
+  padding: 1rem;
+}
+
+.logo {
+  font-weight: bold;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+  text-align: center;
+  color: white;
+  background: var(--bg-secondary);
+  font-size: 1.5rem;
+  letter-spacing: 0.3ch;
+  width: 100%;
+}
+
+.logo i {
+  margin-left: 11rem;
+  transform: rotate(0deg);
+  transition: var(--transition-speed);
+}
+
+.logo-text
+{
+  display: inline;
+  position: absolute;
+  left: 0px;
+  transition: var(--transition-speed);
+}
+
+
+/* Small screens */
+@media only screen and (max-width: 600px) {
+  .navbar {
+    bottom: 0;
+    width: 100vw;
+    height: 5rem;
+    overflow: auto;
+  }
+
+  .logo {
+    display: none;
+  }
+
+  .navbar-nav {
+    flex-direction: row;
+  }
+
+  .nav-link {
+    justify-content: center;
+  }
+
+  .link-text {
+    display: none;
+  }
+
+  .logout {
+    position: inherit;
+  }
+
+  main {
+    margin: 0;
+  }
+}
+
+/* Large screens */
+@media only screen and (min-width: 600px) {
+  .navbar {
+    top: 0;
+    width: 16rem;
+    height: 100vh;
+  }
+
+  .logout {
+    position: absolute;
+    bottom: 0;
+  }
+}
+
+input[type=text]:not(.browser-default), 
+input[type=text]:not(.browser-default):focus:not([readonly]),
+input[type=email]:not(.browser-default), 
+input[type=email]:not(.browser-default):focus:not([readonly]),
+input[type=password]:not(.browser-default), 
+input[type=password]:not(.browser-default):focus:not([readonly])
+input[type=date]:not(.browser-default), 
+input[type=date]:not(.browser-default):focus:not([readonly])
+input[type=file]:not(.browser-default), 
+input[type=file]:not(.browser-default):focus:not([readonly])  {
+	color: var(--text-primary);
+  border: 2px solid var(--text-secondary);
+  border-bottom: 2px solid var(--text-secondary);
+  box-shadow: none;
+  border-radius: 12px;
+  text-indent: 16px;
+  font-weight: 500;
+}
+
+.selects-container input[type=text]:not(.browser-default), 
+.selects-container input[type=text]:not(.browser-default):focus:not([readonly]) {
+  border: none;
+  border-bottom: none;
+}
+
+.select-wrapper + label {
+  position: absolute;
+  top: -34px;
+  font-size: 0.8rem;
+}
+
+select {
+  background-color: var(--bg-primary);
+  width: 100%;
+  padding: 5px 10px;
+  border-radius: 4px;
+  height: 3rem;
+  color: var(--text-primary);
+  border-color: var(--text-secondary);
+  float: right;
+}
+/* 
+input.valid[type=text]:not(.browser-default),
+input.valid[type=email]:not(.browser-default),
+input.valid[type=password]:not(.browser-default) {
+  box-shadow: none;
+  border: 1px solid var(--text-primary);
+}
+
+input[type=text]:not(.browser-default)+label, 
+input[type=text]:not(.browser-default):focus:not([readonly])+label,
+input[type=text]:not(.browser-default).validate+label,
+input[type=email]:not(.browser-default)+label, 
+input[type=email]:not(.browser-default):focus:not([readonly])+label,
+input[type=email]:not(.browser-default).validate+label,
+input[type=password]:not(.browser-default)+label, 
+input[type=password]:not(.browser-default):focus:not([readonly])+label,
+input[type=password]:not(.browser-default).validate+label {
+	color: var(--text-primary);
+  width: 60%;
+  font-weight: 500;
+  font-size: 1rem;
+  left: 20%;
+  margin-top: 2px;
+} */
