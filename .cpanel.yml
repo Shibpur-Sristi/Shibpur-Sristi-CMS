@@ -1,0 +1,5 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home1/shibpmpw/cms.shibpursristi.org/
+    - /bin/cp * $DEPLOYPATH
