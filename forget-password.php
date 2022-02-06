@@ -29,7 +29,7 @@
         <form action="" class="card center-align" id="login-form">
             <div class="card-content">
                 <img src="./images/logo.png" alt="" height="64px">
-                <h5 class="center-align">Login to your Account</h5>
+                <h5 class="center-align">Reset your Password</h5>
                 <br>
                 <div class="row">
                     <div class="input-field center-align  ">
@@ -37,19 +37,15 @@
                     </div>
                 </div>
 
-                <div class="row">
-                    <div class="input-field center-align">
-                        <input id="user-password" type="password" class="validate" placeholder="Password">
-                    </div>
-                </div>
-
                 <div>
-                    <button class="btn-primary center-align" id="login-btn">Login</button>
+                    <button class="btn-primary center-align" id="submit-btn">Reset Password</button>
                 </div>
                 <br>
-                <div id="status-msg" style="color: #F14C4C;"></div>
-                <a href="forget-password.php">Forgot password?</a>
+                <div id="status-msg" style="color: #4CAF50;"></div>
                 <p>&nbsp;</p>
+                <div>
+                    <a class="center-align" id="login-btn" style="display: none" href="login.php">Login Now</a>
+                </div>
             </div>
         </form>
     </div>
@@ -64,24 +60,29 @@
 
         // get user info
         const email = loginForm['user-email'].value;
-        const password = loginForm['user-password'].value;
 
-        const loginBtn = document.querySelector('#login-btn');
-        loginBtn.innerText = 'Loggin In...';
+        const loginBtn = document.querySelector('#submit-btn');
+        loginBtn.innerText = 'Sending...';
         loginBtn.disabled = true;
         loginBtn.style.backgroundColor = '#fff';
         loginBtn.style.color = '#167CBC';
         loginBtn.style.boxShadow = 'none';
 
         // log the user in
-        auth.signInWithEmailAndPassword(email, password).then((cred) => {
+        auth.sendPasswordResetEmail(email).then((cred) => {
             // console.log(cred.user);
-            loginForm.reset();
-            window.history.back();
+            document.querySelector('#status-msg').innerHTML = "Reset link has been sent to your email successfully.";
+            loginBtn.innerText = 'Send Link Againg';
+            loginBtn.disabled = false;
+            loginBtn.style.backgroundColor = '#167CBC';
+            loginBtn.style.color = '#fff';
+            loginBtn.style.boxShadow = '0 2px 10px rgb(0 0 0 / 30%)';
+            document.querySelector('#login-btn').style.display = 'block';
+
         }).catch((err) => {
             // console.log(err.message)
             document.querySelector('#status-msg').innerHTML = err.message;
-            loginBtn.innerText = 'Log In';
+            loginBtn.innerText = 'Reset Password';
             loginBtn.disabled = false;
             loginBtn.style.backgroundColor = '#167CBC';
             loginBtn.style.color = '#fff';
