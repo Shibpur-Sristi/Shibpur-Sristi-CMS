@@ -17,8 +17,9 @@ $queryResult = $conn->query($query);
 $projects = [];
 if ($queryResult->num_rows > 0) {
     while ($row = $queryResult->fetch_assoc()) {
-        $imageURL = 'https://www.shibpursristi.org/admin/sristi_page/project_image/'.$row["thumb_image"];
-        $prj_date = $row["prj_date"];
+        $imageURL = 'https://www.shibpursristi.org/admin/sristi_page/project_image/' . $row["thumb_image"];
+        $dateObject = DateTime::createFromFormat('Y-m-d', $row["prj_date"]);
+        $prj_date = $dateObject->format('M d, Y');
         $place = $row["place"];
         $prj_name = $row["prj_name"];
         $prj_type = $row["prj_catagory"];
