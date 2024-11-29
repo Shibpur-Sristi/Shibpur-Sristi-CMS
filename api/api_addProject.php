@@ -17,80 +17,81 @@
 <body>
     <?php
 
-// $project_type = $_GET['project'];
-if (isset($_POST['submit'])) {
-    // Include the database configuration file
-    include_once '../includes/db.php';
-    // define ('SITE_ROOT', realpath(dirname(__DIR__)));
-
-    // File upload configuration
-    $allowTypes = array('jpg','png','jpeg','gif');
-    $project_type = $_POST['prj-type'];
-    $prj_name = $_POST['prj_name'];
-    $prj_date = $_POST['prj_date'];
-    $place = $_POST['place'];
-    $short_desc = $_POST['short_desc'];
-    $short_desc = str_replace("'", "\'", $short_desc);
-    $short_desc = str_replace("\"", "\\\"", $short_desc);
-    $long_desc = $_POST['long_desc'];
-    $long_desc = str_replace("'", "\'", $long_desc);
-    $long_desc = str_replace("\"", "\\\"", $long_desc);
-
-    mkdir("../project-image/".$prj_name);
-    $targetDir = "../project-image/".$prj_name."/";
+    // $project_type = $_GET['project'];
+    if (isset($_POST['submit'])) {
+        // Include the database configuration file
+        include_once '../includes/db.php';
+        // define ('SITE_ROOT', realpath(dirname(__DIR__)));
     
-    $statusMsg = $errorMsg = $insertValuesSQL = $errorUpload = $errorUploadType = $icon = '';
-    $fileNames = array_filter($_FILES['files']['name']);
-    if (!empty($fileNames)) {
-        foreach ($_FILES['files']['name'] as $key=>$val) {
-            // File upload path
-            $thumb_image = basename($_FILES['files']['name'][$key]);
-            $targetFilePath = $targetDir . $thumb_image;
-             
-            // Check whether file type is valid
-            $fileType = pathinfo($targetFilePath, PATHINFO_EXTENSION);
-            if (in_array($fileType, $allowTypes)) {
-                // Upload file to server
-                if (move_uploaded_file($_FILES["files"]["tmp_name"][$key], $targetFilePath)) {
-                    // Image db insert sql
-                    $insertValuesSQL .= "('".$project_type."','".$prj_name."', '".$prj_date."', '".$place."', '".$thumb_image."', '".$short_desc."', '".$long_desc."')";
+        // File upload configuration
+        $allowTypes = array('jpg', 'png', 'jpeg', 'gif');
+        $project_type = $_POST['prj-type'];
+        $prj_name = $_POST['prj_name'];
+        $dateObject = DateTime::createFromFormat('M d, Y', $_POST['prj_date']);
+        $prj_date = $dateObject->format('Y-m-d');
+        $place = $_POST['place'];
+        $short_desc = $_POST['short_desc'];
+        $short_desc = str_replace("'", "\'", $short_desc);
+        $short_desc = str_replace("\"", "\\\"", $short_desc);
+        $long_desc = $_POST['long_desc'];
+        $long_desc = str_replace("'", "\'", $long_desc);
+        $long_desc = str_replace("\"", "\\\"", $long_desc);
+
+        mkdir("../project-image/" . $prj_name);
+        $targetDir = "../project-image/" . $prj_name . "/";
+
+        $statusMsg = $errorMsg = $insertValuesSQL = $errorUpload = $errorUploadType = $icon = '';
+        $fileNames = array_filter($_FILES['files']['name']);
+        if (!empty($fileNames)) {
+            foreach ($_FILES['files']['name'] as $key => $val) {
+                // File upload path
+                $thumb_image = basename($_FILES['files']['name'][$key]);
+                $targetFilePath = $targetDir . $thumb_image;
+
+                // Check whether file type is valid
+                $fileType = pathinfo($targetFilePath, PATHINFO_EXTENSION);
+                if (in_array($fileType, $allowTypes)) {
+                    // Upload file to server
+                    if (move_uploaded_file($_FILES["files"]["tmp_name"][$key], $targetFilePath)) {
+                        // Image db insert sql
+                        $insertValuesSQL .= "('" . $project_type . "','" . $prj_name . "', '" . $prj_date . "', '" . $place . "', '" . $thumb_image . "', '" . $short_desc . "', '" . $long_desc . "')";
+                    } else {
+                        $errorUpload .= $_FILES['files']['name'][$key] . ' | ';
+                    }
                 } else {
-                    $errorUpload .= $_FILES['files']['name'][$key].' | ';
+                    $errorUploadType .= $_FILES['files']['name'][$key] . ' | ';
                 }
-            } else {
-                $errorUploadType .= $_FILES['files']['name'][$key].' | ';
             }
-        }
-         
-        if (!empty($insertValuesSQL)) {
-            // Insert image file name into database
-            // echo $insertValuesSQL;
-            $insert = $conn->query("INSERT INTO `project_details` (`prj_catagory`, `prj_name`, `prj_date`, `place`, `thumb_image`, `short_desc`, `long_desc`) VALUES $insertValuesSQL");
-            if ($insert) {
-                $errorUpload = !empty($errorUpload)?'Upload Error: '.trim($errorUpload, ' | '):'';
-                $errorUploadType = !empty($errorUploadType)?'File Type Error: '.trim($errorUploadType, ' | '):'';
-                $errorMsg = !empty($errorUpload)?'<br/>'.$errorUpload.'<br/>'.$errorUploadType:'<br/>'.$errorUploadType;
-                $statusMsg = "Files are uploaded successfully.".$errorMsg;
-                $icon = '<div class="icon"><i class="far fa-check-circle" style="color: #388e3c;"></i></div>';
-            } else {
-                $statusMsg = "Sorry, there was an error uploading your file.";
-                $icon = '<div class="icon"><i class="far fa-times-circle" style="color: #d32f2f;"></i></div>';
+
+            if (!empty($insertValuesSQL)) {
+                // Insert image file name into database
+                // echo $insertValuesSQL;
+                $insert = $conn->query("INSERT INTO `project_details` (`prj_catagory`, `prj_name`, `prj_date`, `place`, `thumb_image`, `short_desc`, `long_desc`) VALUES $insertValuesSQL");
+                if ($insert) {
+                    $errorUpload = !empty($errorUpload) ? 'Upload Error: ' . trim($errorUpload, ' | ') : '';
+                    $errorUploadType = !empty($errorUploadType) ? 'File Type Error: ' . trim($errorUploadType, ' | ') : '';
+                    $errorMsg = !empty($errorUpload) ? '<br/>' . $errorUpload . '<br/>' . $errorUploadType : '<br/>' . $errorUploadType;
+                    $statusMsg = "Files are uploaded successfully." . $errorMsg;
+                    $icon = '<div class="icon"><i class="far fa-check-circle" style="color: #388e3c;"></i></div>';
+                } else {
+                    $statusMsg = "Sorry, there was an error uploading your file.";
+                    $icon = '<div class="icon"><i class="far fa-times-circle" style="color: #d32f2f;"></i></div>';
+                }
             }
+        } else {
+            $statusMsg = 'Please select a file to upload.';
         }
-    } else {
-        $statusMsg = 'Please select a file to upload.';
-    }
-     
-    // Display status message
-    $html = '<div class="center">
-                '.$icon.'
-                <h5>'.$statusMsg.'</h5>
+
+        // Display status message
+        $html = '<div class="center">
+                ' . $icon . '
+                <h5>' . $statusMsg . '</h5>
                 <p>redirecting in 5<i>seconds...</i></p>
             </div>';
-    echo $html;
-    header("refresh:5;url=../".strtolower($project_type).".php");
-}
-?>
+        echo $html;
+        header("refresh:5;url=../" . strtolower($project_type) . ".php");
+    }
+    ?>
 </body>
 
 </html>

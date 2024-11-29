@@ -98,12 +98,10 @@
             projectType.value = project.type;
         })
 
-    })
-
     auth.onAuthStateChanged(user => {
                 if (user) {} else {
                     window.location = "login.php"
-                }
+                }})
     </script>
     </script>
 </body>
