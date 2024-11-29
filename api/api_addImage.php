@@ -1,26 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <!-- Materialize CSS -->
-    <link rel="stylesheet" href="../css/materialize.css">
-    <link rel="stylesheet" href="../css/styles.css">
-
-    <!-- CDN Links & JS -->
-    <script src="../js/materialize.js"></script>
-    <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
-
-    <title>Dashboard | Shibpur Sristi</title>
-</head>
-
-<body>
-    <?php
-    if (isset($_POST['submit'])) {
-        // Include the database configuration file
-        include_once '../includes/db.php';
-
-        // File upload configuration
+<?php
+if (isset($_POST['submit'])) {
+    // Include the database configuration file
+    include_once '../includes/db.php';
+     
+    // File upload configuration
     
         $allowTypes = array('jpg', 'png', 'jpeg', 'gif');
         $prj_catagory = $_POST['project-type'];
@@ -80,10 +63,27 @@
                 <h5>' . $statusMsg . '</h5>
                 <p>redirecting in 5<i>seconds...</i></p>
             </div>';
-        echo $html;
-        header("refresh:5;url=../index.php");
-    }
-    ?>
+    echo $html;
+    header("refresh:5;url=../index.php");
+}
+?>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Materialize CSS -->
+    <link rel="stylesheet" href="../css/materialize.css">
+    <link rel="stylesheet" href="../css/styles.css">
+
+    <!-- CDN Links & JS -->
+    <script src="../js/materialize.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+
+    <title>Dashboard | Shibpur Sristi</title>
+</head>
+
+<body>
 </body>
 
 </html>

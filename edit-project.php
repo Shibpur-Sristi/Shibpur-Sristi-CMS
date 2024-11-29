@@ -4,23 +4,23 @@
 <head>
     <?php include './includes/head.php'; ?>
     <style>
-    form {
-        margin: 1rem 5rem;
-    }
-
-    #short-desc {
-        height: 8rem;
-    }
-
-    #long-desc {
-        height: 12rem;
-    }
-
-    @media only screen and (max-width: 768px) {
         form {
-            margin: 1rem 0;
+            margin: 1rem 5rem;
         }
-    }
+
+        #short-desc {
+            height: 8rem;
+        }
+
+        #long-desc {
+            height: 12rem;
+        }
+
+        @media only screen and (max-width: 768px) {
+            form {
+                margin: 1rem 0;
+            }
+        }
     </style>
 </head>
 
@@ -39,22 +39,22 @@
                             <h5>Project Details</h5>
                         </div>
                         <div class="input-field">
-                            <input type="text" name="prj_name_disable" placeholder="Project Name" class="validate">
+                            <input type="text" name="prj_name_disable" placeholder="Project Name" class="validate" required>
                             <input type="hidden" name="prj_name">
                         </div>
                         <div class="input-field">
-                            <input type="text" name="prj_date" placeholder="Date" class="datepicker">
+                            <input type="text" name="prj_date" placeholder="Date" class="datepicker" required>
                         </div>
                         <div class="input-field">
-                            <input type="text" name="place" placeholder="Project Location" class="validate">
+                            <input type="text" name="place" placeholder="Project Location" class="validate" required>
                         </div>
                         <div class="input-field">
                             <input type="text" name="short_desc" placeholder="Short Description (Approx 90 words)"
-                                class="validate" id="short-desc">
+                                class="validate" id="short-desc" required>
                         </div>
                         <div class="input-field">
                             <input type="text" name="long_desc" placeholder="Long Description" class="validate"
-                                id="long-desc">
+                                id="long-desc" required>
                         </div>
 
                         ADD Images: Please select image as size 570*350
@@ -71,39 +71,63 @@
                 </div>
             </div>
         </div>
-
-
     </main>
 
     <?php include './includes/scripts.php'; ?>
+
     <script>
-    var urlParams = new URLSearchParams(window.location.search);
-    var project = urlParams.get('project')
+       var urlParams = new URLSearchParams(window.location.search);
+var project = urlParams.get('project');
 
-    doAjax('api/api_project.php', 'GET', {
-            project: project
-        })
-        .then(response => {
-            var project = JSON.parse(response).data[0];
-            // console.log(project);
-            $("input[name='prj_name']").val(project.name);
-            $("input[name='prj_name_disable']").val(project.name);
-            $("input[name='prj_name_disable']").prop('disabled', true);
-            $("input[name='prj_date']").val(project.date);
-            $("input[name='place']").val(project.location);
-            $("input[name='short_desc']").val(project.description);
-            $("input[name='long_desc']").val(project.details);
+// Make sure doAjax is defined before calling it
+doAjax('api/api_project.php', 'GET', { project: project })
+    .then(response => {
+        try {
+            // Attempt to parse the response as JSON
+            var data = JSON.parse(response).data[0];
 
-            var projectType = document.getElementById('pt');
-            projectType.value = project.type;
-        })
+            // Check if the response has valid data
+            if (data.statusCode === 200 && data.data && data.data.length > 0) {
+                var project = data.data[0];
 
-    auth.onAuthStateChanged(user => {
-                if (user) {} else {
-                    window.location = "login.php"
-                }})
+                // Populate form fields with project data
+                $("input[name='prj_name']").val(project.name);
+                $("input[name='prj_name_disable']").val(project.name);
+                $("input[name='prj_name_disable']").prop('disabled', true);
+                $("input[name='prj_date']").val(project.date);
+                $("input[name='place']").val(project.location);
+                $("input[name='short_desc']").val(project.description);
+                $("input[name='long_desc']").val(project.details);
+
+                // Set project type value
+                var projectType = document.getElementById('pt');
+                projectType.value = project.type;
+            } else {
+                // Handle no data or error response
+                console.error('Error: No project data found or invalid response', data);
+            }
+        } catch (error) {
+            // Handle JSON parse error
+            console.error('Error parsing project data:', error);
+            console.error('Response:', response);
+        }
+    })
+    .catch(error => {
+        console.error('Error fetching project:', error);
+    });
+
+// Firebase authentication check
+auth.onAuthStateChanged(user => {
+    if (user) {
+        // User is logged in
+    } else {
+        // Redirect to login if not authenticated
+        window.location = "login.php";
+    }
+});
+
     </script>
-    </script>
+
 </body>
 
 </html>

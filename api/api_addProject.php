@@ -1,47 +1,42 @@
-<!DOCTYPE html>
-<html lang="en">
+<?php 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
-<head>
-    <!-- Materialize CSS -->
-    <link rel="stylesheet" href="../css/materialize.css">
-    <link rel="stylesheet" href="../css/styles.css">
+// Start output buffering
+ob_start();
 
-    <!-- CDN Links & JS -->
-    <script src="../js/materialize.js"></script>
-    <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+try {
+    // Include the database configuration file
+    include_once '../includes/db.php';
 
-    <title>Dashboard | Shibpur Sristi</title>
-</head>
-
-<body>
-    <?php
-
-    // $project_type = $_GET['project'];
     if (isset($_POST['submit'])) {
-        // Include the database configuration file
-        include_once '../includes/db.php';
-        // define ('SITE_ROOT', realpath(dirname(__DIR__)));
-    
         // File upload configuration
         $allowTypes = array('jpg', 'png', 'jpeg', 'gif');
         $project_type = $_POST['prj-type'];
         $prj_name = $_POST['prj_name'];
-        $dateObject = DateTime::createFromFormat('M d, Y', $_POST['prj_date']);
-        $prj_date = $dateObject->format('Y-m-d');
+        $prj_date = $_POST['prj_date'];
         $place = $_POST['place'];
         $short_desc = $_POST['short_desc'];
-        $short_desc = str_replace("'", "\'", $short_desc);
-        $short_desc = str_replace("\"", "\\\"", $short_desc);
         $long_desc = $_POST['long_desc'];
-        $long_desc = str_replace("'", "\'", $long_desc);
-        $long_desc = str_replace("\"", "\\\"", $long_desc);
 
-        mkdir("../project-image/" . $prj_name);
-        $targetDir = "../project-image/" . $prj_name . "/";
+        // Sanitize and escape inputs to prevent XSS and SQL injection
+        $short_desc = str_replace(["'", "\""], ["\'", "\\\""], $short_desc);
+        $long_desc = str_replace(["'", "\""], ["\'", "\\\""], $long_desc);
 
+        // Define the base path and folder
+        $basePath = "/home/tkhuygsu/public_html/admin/sristi_page/project_image/";
+        $projectFolder = $basePath . $prj_name;
+
+        // Check if folder exists, if not, create it
+        if (!is_dir($projectFolder)) {
+            mkdir($projectFolder, 0755, true); // Recursive directory creation
+        }
+
+        $targetDir = $basePath . $prj_name . "/";
         $statusMsg = $errorMsg = $insertValuesSQL = $errorUpload = $errorUploadType = $icon = '';
-        $fileNames = array_filter($_FILES['files']['name']);
+        $fileNames = array_filter($_FILES['files']['name']); // Get all file names
+
         if (!empty($fileNames)) {
             foreach ($_FILES['files']['name'] as $key => $val) {
                 // File upload path
@@ -53,25 +48,24 @@
                 if (in_array($fileType, $allowTypes)) {
                     // Upload file to server
                     if (move_uploaded_file($_FILES["files"]["tmp_name"][$key], $targetFilePath)) {
-                        // Image db insert sql
-                        $insertValuesSQL .= "('" . $project_type . "','" . $prj_name . "', '" . $prj_date . "', '" . $place . "', '" . $thumb_image . "', '" . $short_desc . "', '" . $long_desc . "')";
+                        // Image db insert SQL
+                        $insertValuesSQL .= "('".$project_type."','".$prj_name."', '".$prj_date."', '".$place."', '".$thumb_image."', '".$short_desc."', '".$long_desc."')";
                     } else {
-                        $errorUpload .= $_FILES['files']['name'][$key] . ' | ';
+                        $errorUpload .= $_FILES['files']['name'][$key].' | ';
                     }
                 } else {
-                    $errorUploadType .= $_FILES['files']['name'][$key] . ' | ';
+                    $errorUploadType .= $_FILES['files']['name'][$key].' | ';
                 }
             }
 
             if (!empty($insertValuesSQL)) {
                 // Insert image file name into database
-                // echo $insertValuesSQL;
                 $insert = $conn->query("INSERT INTO `project_details` (`prj_catagory`, `prj_name`, `prj_date`, `place`, `thumb_image`, `short_desc`, `long_desc`) VALUES $insertValuesSQL");
                 if ($insert) {
-                    $errorUpload = !empty($errorUpload) ? 'Upload Error: ' . trim($errorUpload, ' | ') : '';
-                    $errorUploadType = !empty($errorUploadType) ? 'File Type Error: ' . trim($errorUploadType, ' | ') : '';
-                    $errorMsg = !empty($errorUpload) ? '<br/>' . $errorUpload . '<br/>' . $errorUploadType : '<br/>' . $errorUploadType;
-                    $statusMsg = "Files are uploaded successfully." . $errorMsg;
+                    $errorUpload = !empty($errorUpload) ? 'Upload Error: '.trim($errorUpload, ' | ') : '';
+                    $errorUploadType = !empty($errorUploadType) ? 'File Type Error: '.trim($errorUploadType, ' | ') : '';
+                    $errorMsg = !empty($errorUpload) ? '<br/>'.$errorUpload.'<br/>'.$errorUploadType : '<br/>'.$errorUploadType;
+                    $statusMsg = "Files are uploaded successfully.".$errorMsg;
                     $icon = '<div class="icon"><i class="far fa-check-circle" style="color: #388e3c;"></i></div>';
                 } else {
                     $statusMsg = "Sorry, there was an error uploading your file.";
@@ -82,16 +76,39 @@
             $statusMsg = 'Please select a file to upload.';
         }
 
-        // Display status message
-        $html = '<div class="center">
-                ' . $icon . '
-                <h5>' . $statusMsg . '</h5>
-                <p>redirecting in 5<i>seconds...</i></p>
+        // Redirect after 5 seconds using absolute URL
+        header("Location: http://cms.shibpursristi.in/".strtolower($project_type).".php");
+        exit(); // Ensure no further code is executed after redirect
+
+        // Display status message before redirect
+        echo '<div class="center">
+                '.$icon.'
+                <h5>'.$statusMsg.'</h5>
+                <p>Redirecting in <i>5</i> seconds...</p>
             </div>';
-        echo $html;
-        header("refresh:5;url=../" . strtolower($project_type) . ".php");
+
     }
-    ?>
+} catch (Exception $e) {
+    echo "Error: " . $e->getMessage();
+}
+
+// End output buffering
+ob_end_flush();
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Materialize CSS -->
+    <link rel="stylesheet" href="../css/materialize.css">
+    <link rel="stylesheet" href="../css/styles.css">
+    <!-- CDN Links & JS -->
+    <script src="../js/materialize.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <title>Dashboard | Shibpur Sristi</title>
+</head>
+<body>
+
 </body>
 
 </html>

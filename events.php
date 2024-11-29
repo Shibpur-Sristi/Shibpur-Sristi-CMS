@@ -40,42 +40,52 @@
     <?php include './includes/scripts.php'; ?>
 
     <script>
-    const setProjects = (projects) => {
-        var template = '';
-        projects.forEach(project => {
-            template += `<tr>
-            <td>${project.name}</td>
-            <td>${project.location}</td>
-            <td>${project.date}</td>
-			<td>
-				<a href="edit-project.php?project=${project.name}"><i class="far fa-edit"></i></a>&emsp;&emsp;
-				<a href="#" onclick="handleDelete('${project.name}')"><i class="fas fa-trash-alt"></i></a> 
-			</td>
-          </tr>`;
-        })
+        const setProjects = (projects) => {
+            let template = '';
+            projects.forEach(project => {
+                template += `<tr>
+                    <td>${project.name}</td>
+                    <td>${project.location}</td>
+                    <td>${project.date}</td>
+                    <td>
+                        <a href="edit-project.php?project=${project.name}"><i class="far fa-edit"></i></a>&emsp;&emsp;
+                        <a href="#" onclick="handleDelete('${project.name}')"><i class="fas fa-trash-alt"></i></a> 
+                    </td>
+                </tr>`;
+            });
 
-        return template;
-    }
-
-    doAjax('api/api_projects.php', 'GET', {
-            project: 'Event'
-        })
-        .then(response => {
-            var projects = JSON.parse(response).data;
-            $('#projects').html(setProjects(projects));
-        })
-
-    const handleDelete = (project) => {
-        // e.preventDefault();
-        if (confirm("Do you really want to delete?")) {
-            window.location.href = "api/api_deleteProject.php?project=" + project + "&type=events";
+            return template;
         }
-    }
-    auth.onAuthStateChanged(user => {
-        if (user) {} else {
-            window.location = "login.php"
+
+        $(document).ready(function() {
+            doAjax('api/api_projects.php', 'GET', {
+                project: 'Event'
+            })
+            .then(response => {
+                console.log('API Response:', response);  // Debugging the response
+                if (response.statusCode === 200 && response.data) {
+                    var projects = response.data;
+                    $('#projects').html(setProjects(projects));
+                } else {
+                    console.error("No data found or incorrect response structure.");
+                }
+            })
+            .catch(err => console.error("Error loading projects:", err));
+        });
+
+        const handleDelete = (project) => {
+            if (confirm("Do you really want to delete?")) {
+                window.location.href = "api/api_deleteProject.php?project=" + project + "&type=events";
+            }
         }
-    })
+
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                // Continue if user is authenticated
+            } else {
+                window.location = "login.php";  // Redirect to login if not authenticated
+            }
+        });
     </script>
 </body>
 
