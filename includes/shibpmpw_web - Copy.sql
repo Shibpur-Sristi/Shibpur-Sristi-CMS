@@ -189,20 +189,7 @@ CREATE TABLE `membership` (
 --
 
 INSERT INTO `membership` (`name`, `gender`, `dob`, `phone`, `email`, `address`, `curr_occupation`, `other_work`, `joining_reason`, `photo`, `photo_id`) VALUES
-('Sanando Mukherjee', 'male', '0000-00-00', '0983610543', 'sanando25@gmail.com', '17/2 Chowdhury Para Lane', 'Service ', '', '', 'scan0073.jpg', '20200725_003845.jpg'),
-('Susmita Sett', 'female', '0000-00-00', '9088718074', 'settsusmita38@gmail.com', 'Bandar Bagpara, Ashray Flat, Domjur, Howrah-711405', 'Study', 'No', 'I have an interest to work for needy people and the inspiration especially getting from the Shibpur Sristi which helps to motivate myself.', 'IMG-20220121-WA0001.jpg', 'IMG-20220121-WA0004.jpg'),
-('Soham singha ADVOCATE', 'male', '0000-00-00', '9123622121', 'Sohamsingha82@gmail.com', 'Ichapur,sastibagan,santragachi, howrah-711104\r\nIchapur,soumichanditala,soumichandi residency,howrah -711104', 'Advocate', 'Member of human right council (Howrah unit)', 'I try to do something for helpless people and stand against those people who exploit the helpless people.', 'inbound5360268652034284806.jpg', 'inbound950756146391791680.jpg'),
-('Tamal Maity', 'male', '1971-11-17', '9433311470', 'tamalmaity@gmail.com', '7/B/2, Akshoy Chakraborty Lane, Shibpur', 'Working as Marketing Head in a Pharma Company of Kolkata', '', '', 'PHOTO.jpeg', 'TAMAL ADHAR CARD.jpg'),
-('Debanjan Bhattacharjee', 'male', '1997-06-17', '7501082279', 'debanjan.official2015@gmail.com', '1/2/1/2/1 Ramji Hazra Lane', 'Student ', '', '', 'IMG-20190829-WA0008.jpeg', 'IMG_20201125_160514.jpg'),
-('Saikat Jana', 'male', '1998-07-31', '7278661001', 'sanijana15@gmail.com', 'Dakshin Jhapordah, Domjur, Howrah', 'Student', 'NA', 'I feel motivated towards social work.', 'WhatsApp Image 2022-01-20 at 11.12.44 PM.jpeg', 'WhatsApp Image 2022-01-20 at 11.13.09 PM.jpeg'),
-('Amit Manna', 'male', '1999-05-29', '7687978288', 'manna.amit99@gmail.com', 'A.T. Ghosh Road\r\n63, Jagacha Girish Colony', 'Student', 'I am a member of GDG, GDSC and GLG community, we arrange impactful events for Developer once in a month.', 'I love to see myself as volunteer of shibpur sristi because the work you guys are doing is amazing, it help people to survive and love your Shikshan Project. If I get a chance to surve them I would be grateful.', 'Photo.jpg', 'Screenshot_20200828-122208.png'),
-('debopriyo ghosh', 'male', '2021-02-04', '1234567890', 'sristishibpur14@gmail.com', 'fdsfvsdgvsdfgbvdsg', 'dbfdhdfvhvdf', 'xvdvdvhdhvdf', 'hdfhvdfhvdfhvdffh', '750x450x1.jpg', '_DSC1719.jpg'),
-('Debopriyo Ghosh', 'male', '2021-02-10', '0896137648', 'debopriyodjghosh@gmail.com', '1 R.M Ghose lane , mallick fatak howrah', 'Test', 'Test', 'Tttttt', 'IMG-20210206-WA0008.jpg', ''),
-('debopriyo ghosh', 'male', '2021-02-18', '1234567890', 'duttarahul1890@gmail.com', 'qqqqqqqqqqqqqqqqqqq', 'wwwwwwwwwwwwwwwww', 'wwweeeeeeeeeeeeeeee', 'eeerrrrrrrrrrrrrrrrrrrrr', '_DSC1719.jpg', '750x450x1.jpg'),
-('website', 'female', '2021-02-22', '2147483647', 'abhirup.santra21@gmail.com', 'qqwwr345fghfh ', 'cvbdfgdf dgd', 'dfgvdfvgd ewe', 'fzxsfvsd  gsber6bfhbs srrtysr ', 'Desert.jpg', ''),
 ('paridhan 2020', 'male', '2021-02-24', '2147483647', 'shibpursristi14@gmail.com', '1sassssssssss', 'dsasasasasasa', 'sadsad', 'zcxx', 'Lighthouse.jpg', ''),
-('image new', 'other', '2021-02-25', '8820328618', 'sumit.samanta26@gmail.com', 'awdwrew5svdfgsvdg', 'sdsfs', 'sdgdsgsdv', 'sdfsddfsdfg', 'Jellyfish.jpg', ''),
-('Debopriyo Ghosh', 'male', '2021-05-08', '0896137648', 'debopriyodjghosh@gmail.com', '1 R.M Ghose lane , mallick fatak howrah', 'Test', 'Test', 'hkjhgkh', 'bg2.jpg', 'bg2.jpg');
 
 -- --------------------------------------------------------
 
@@ -284,34 +271,6 @@ CREATE TABLE `subscriber` (
 
 INSERT INTO `subscriber` (`name`, `email`) VALUES
 ('hello', 'world'),
-('Amit Manna', 'manna.amit99@gmail.com'),
-('debopriyo ghosh', 'sumit.samanta26@gmail.com'),
-('Peter Winter', 'winter@example.com'),
-('Amit Manna', 'manna.amit99@gmail.com'),
-('Keira Rippin', 'Rosie_Kreiger@gmail.com'),
-('Jorge Bartoletti', 'jmarie9619@gmail.com'),
-('Marco Stiedemann', 'revelectric@live.ca'),
-('Paul Beier', 'carol060g@yahoo.com'),
-('Mr. Ronnie Yost', 'makersnest@hotmail.com'),
-('Lexus Hodkiewicz', 'mframpton@yahoo.com'),
-('Laverne Carter', 'sahraabdullahi272@gmail.com'),
-('Marsha Frami', 'ssproule17@gmail.com'),
-('Robin Lueilwitz', 'jn1980@yahoo.com'),
-('Angelica Morar', 'customercare@scrivens.com'),
-('Angelo Rippin', 'mlhanson16@gmail.com'),
-('Philip Prosacco', 'suebrowell@yahoo.com'),
-('Mildred Tillman', 'crashla8@gmail.com'),
-('Ken Bins', 'kbking40@verizon.net'),
-('Makenna Heathcote', 'donkeyes@hotmail.com'),
-('Dr. Orville Torphy', 'lexsnow@yahoo.com'),
-('Dennis Daniel', 'hetverfrias@gmail.com'),
-('Emilia Bogan', 'eghazal@carzonesales.com'),
-('Rickey Runte', 'tejb1@yahoo.com'),
-('Owen Harris II', 'ekatz8869@yahoo.com'),
-('Herminia Morissette', 'omariond88@gmail.com'),
-('Paris Nicolas', 'monotui@yahoo.com'),
-('Clarissa Luettgen', 'calorsmedina344@gmail.com'),
-('Juanita Jenkins', 'nmeemange@yahoo.com');
 
 -- --------------------------------------------------------
 
