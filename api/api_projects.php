@@ -45,17 +45,16 @@ $projects = [];
 if ($queryResult->num_rows > 0) {
     // Fetch each row and prepare the project data
     while ($row = $queryResult->fetch_assoc()) {
-        $imageURL = 'https://www.shibpursristi.org/admin/sristi_page/project_image/' . $row["thumb_image"];
-        $dateObject = DateTime::createFromFormat('Y-m-d', $row["prj_date"]);
-        $prj_date = $dateObject->format('M d, Y');
-        $place = $row["place"];
+        // $dateObject = DateTime::createFromFormat('Y-m-d', $row["prj_date"]);
+        // $prj_date = $dateObject->format('M d, Y');
+        // $place = $row["place"];
         // You can directly use the data without utf8_encode
         $prj_name = $row["prj_name"];
         $place = $row["place"];
         $long_desc = $row["long_desc"];
         $short_desc = $row["short_desc"];
         
-        $imageURL = 'https://www.shibpursristi.in/admin/sristi_page/project_image/' . $row["thumb_image"];
+        $imageURL = $base_image_url . $row["thumb_image"];
         $prj_date = $row["prj_date"];
         $prj_type = $row["prj_catagory"];
 

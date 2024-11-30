@@ -5,71 +5,92 @@ if (isset($_POST['submit'])) {
      
     // File upload configuration
     
-        $allowTypes = array('jpg', 'png', 'jpeg', 'gif');
-        $prj_catagory = $_POST['project-type'];
-        $prj_name = $_POST['project'];
-        $targetDir = "../project-image/" . $prj_name . "/";
-
-        if (!file_exists($targetDir)) {
-            mkdir("../project-image/" . $prj_name);
-        }
-
-        $statusMsg = $errorMsg = $insertValuesSQL = $errorUpload = $errorUploadType = $icon = '';
-        $fileNames = array_filter($_FILES['files']['name']);
-        if (!empty($fileNames)) {
-            foreach ($_FILES['files']['name'] as $key => $val) {
-                // File upload path
-                //$fileName = basename($_FILES['files']['name'][$key]);
-                $img = basename($_FILES['files']['name'][$key]);
-                $targetFilePath = $targetDir . $img;
-
-                // Check whether file type is valid
-                $fileType = pathinfo($targetFilePath, PATHINFO_EXTENSION);
-                if (in_array($fileType, $allowTypes)) {
-                    // Upload file to server
-                    if (move_uploaded_file($_FILES["files"]["tmp_name"][$key], $targetFilePath)) {
-                        // Image db insert sql
-                        $insertValuesSQL .= "('" . $prj_catagory . "','" . $prj_name . "','" . $img . "'),";
-                    } else {
-                        $errorUpload .= $_FILES['files']['name'][$key] . ' | ';
-                    }
-                } else {
-                    $errorUploadType .= $_FILES['files']['name'][$key] . ' | ';
-                }
-            }
-
-            if (!empty($insertValuesSQL)) {
-                $insertValuesSQL = trim($insertValuesSQL, ',');
-                // Insert image file name into database
+    $allowTypes = array('jpg','png','jpeg','gif');
+    $prj_catagory = $_POST['project-type'];
+    $prj_name = $_POST['project'];
     
-                $insert = $conn->query("INSERT INTO image_db (prj_catagory, prj_name, img) VALUES $insertValuesSQL");
-                if ($insert) {
-                    $errorUpload = !empty($errorUpload) ? 'Upload Error: ' . trim($errorUpload, ' | ') : '';
-                    $errorUploadType = !empty($errorUploadType) ? 'File Type Error: ' . trim($errorUploadType, ' | ') : '';
-                    $errorMsg = !empty($errorUpload) ? '<br/>' . $errorUpload . '<br/>' . $errorUploadType : '<br/>' . $errorUploadType;
-                    $statusMsg = "Files are uploaded successfully." . $errorMsg;
-                    $icon = '<div class="icon"><i class="far fa-check-circle" style="color: #388e3c;"></i></div>';
-                } else {
-                    $statusMsg = "Sorry, there was an error uploading your file.";
-                    $icon = '<div class="icon"><i class="far fa-times-circle" style="color: #d32f2f;"></i></div>';
-                }
-            }
-        } else {
-            $statusMsg = 'Please select a file to upload.';
+    //  $basePath = in db.php;
+        
+        $projectFolder = $basePath ."/project_gallary/" . $prj_name;
+        if (!is_dir($projectFolder)) {
+            mkdir($projectFolder, 0755, true); // Recursive directory creation
         }
-        // Display status message
-        $html = '<div class="center">
-                ' . $icon . '
-                <h5>' . $statusMsg . '</h5>
-                <p>redirecting in 5<i>seconds...</i></p>
-            </div>';
-    echo $html;
-    header("refresh:5;url=../index.php");
+
+    
+    
+    $targetDir = $basePath."/project_gallary/".$prj_name."/";
+     
+    $statusMsg = $errorMsg = $insertValuesSQL = $errorUpload = $errorUploadType = $icon = '';
+    $fileNames = array_filter($_FILES['files']['name']);
+    if (!empty($fileNames)) {
+        foreach ($_FILES['files']['name'] as $key=>$val) {
+            // File upload path
+            //$fileName = basename($_FILES['files']['name'][$key]);
+            $img = basename($_FILES['files']['name'][$key]);
+            $targetFilePath = $targetDir . $img;
+             
+            // Check whether file type is valid
+            $fileType = pathinfo($targetFilePath, PATHINFO_EXTENSION);
+            if (in_array($fileType, $allowTypes)) {
+                // Upload file to server
+                if (move_uploaded_file($_FILES["files"]["tmp_name"][$key], $targetFilePath)) {
+                    // Image db insert sql
+                    $insertValuesSQL .= "('".$prj_catagory."','".$prj_name."','".$img."'),";
+                } else {
+                    $errorUpload .= $_FILES['files']['name'][$key].' | ';
+                }
+            } else {
+                $errorUploadType .= $_FILES['files']['name'][$key].' | ';
+            }
+        }
+         
+        if (!empty($insertValuesSQL)) {
+            $insertValuesSQL = trim($insertValuesSQL, ',');
+            // Insert image file name into database
+
+            $insert = $conn->query("INSERT INTO image_db (prj_catagory, prj_name, img) VALUES $insertValuesSQL");
+            if ($insert) {
+                $errorUpload = !empty($errorUpload)?'Upload Error: '.trim($errorUpload, ' | '):'';
+                $errorUploadType = !empty($errorUploadType)?'File Type Error: '.trim($errorUploadType, ' | '):'';
+                $errorMsg = !empty($errorUpload)?'<br/>'.$errorUpload.'<br/>'.$errorUploadType:'<br/>'.$errorUploadType;
+                $statusMsg = "Files are uploaded successfully.".$errorMsg;
+                $icon = '<div class="icon"><i class="far fa-check-circle" style="color: #388e3c;"></i></div>';
+            } else {
+                $statusMsg = "Sorry, there was an error uploading your file.";
+                $icon = '<div class="icon"><i class="far fa-times-circle" style="color: #d32f2f;"></i></div>';
+            }
+        }
+    } else {
+        $statusMsg = 'Please select a file to upload.';
+    }
+    // Display status message
+      // Display status message
+        $redirectUrl = "../index.php";
+
+      $html = '
+<div class="center">
+    ' . $icon . '
+    <h5>' . $statusMsg . '</h5>
+    <button onclick="window.location.href=\'' . $redirectUrl . '\'" style="
+        margin-top: 15px;
+        padding: 10px 20px;
+        font-size: 16px;
+        background-color: #007BFF;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    ">
+        Go Back
+    </button>
+</div>';
+echo $html;
 }
+
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <!-- Materialize CSS -->
     <link rel="stylesheet" href="../css/materialize.css">
@@ -82,8 +103,6 @@ if (isset($_POST['submit'])) {
 
     <title>Dashboard | Shibpur Sristi</title>
 </head>
-
 <body>
 </body>
-
 </html>

@@ -84,11 +84,11 @@ doAjax('api/api_project.php', 'GET', { project: project })
     .then(response => {
         try {
             // Attempt to parse the response as JSON
-            var data = JSON.parse(response).data[0];
+            var data = response.data[0];
 
             // Check if the response has valid data
-            if (data.statusCode === 200 && data.data && data.data.length > 0) {
-                var project = data.data[0];
+            if (response.statusCode === 200 && response.data && response.data.length > 0) {
+                var project = response.data[0];
 
                 // Populate form fields with project data
                 $("input[name='prj_name']").val(project.name);

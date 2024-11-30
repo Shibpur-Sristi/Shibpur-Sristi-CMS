@@ -47,6 +47,12 @@
                 <span class="link-text">Images</span>
             </a>
         </li>
+        <li class="nav-item">
+            <a href="edit-table.php" class="nav-link">
+                <i class="fa fa-database"></i>
+                <span class="link-text">Edit Data</span>
+            </a>
+        </li>
 
         <li class="nav-item logout">
             <a href="#" class="nav-link" id="logout">

@@ -1,34 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <!-- Materialize CSS -->
-    <link rel="stylesheet" href="../css/materialize.css">
-    <link rel="stylesheet" href="../css/styles.css">
-
-    <!-- CDN Links & JS -->
-    <script src="../js/materialize.js"></script>
-    <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
-
-    <title>Dashboard | Shibpur Sristi</title>
-</head>
-
-<body>
-    <?php
+<?php
     // Include the database configuration file
     include_once '../includes/db.php';
 
     if (isset($_POST['submit'])) {
-        // define ('SITE_ROOT', realpath(dirname(__DIR__)));
     
         // File upload configuration
         $allowTypes = array('jpg', 'png', 'jpeg', 'gif');
         $project_type = $_POST['prj-type'];
         $prj_name = $_POST['prj_name'];
         $prj_date = $_POST['prj_date'];
-        $dateObject = DateTime::createFromFormat('M d, Y', $prj_date);
-        $prj_date = $dateObject->format('Y-m-d');
+        // $dateObject = DateTime::createFromFormat('M d, Y', $prj_date);
+        // $prj_date = $dateObject->format('Y-m-d');
         $place = $_POST['place'];
         $short_desc = $_POST['short_desc'];
         $short_desc = str_replace("'", "\'", $short_desc);
@@ -37,17 +19,20 @@
         $long_desc = str_replace("'", "\'", $long_desc);
         $long_desc = str_replace("\"", "\\\"", $long_desc);
 
-        $targetDir = "../project-image/" . $prj_name . "/";
-        if (!file_exists($targetDir)) {
-            mkdir("../project-image/" . $prj_name);
+        // $basePath = "in db.php";
+        
+        $projectFolder = $basePath ."/project_gallary/" . $prj_name;
+        if (!is_dir($projectFolder)) {
+            mkdir($projectFolder, 0755, true); // Recursive directory creation
         }
+        
         $statusMsg = $errorMsg = $insertValuesSQL = $errorUpload = $errorUploadType = $icon = '';
         $fileNames = array_filter($_FILES['files']['name']);
         if (!empty($fileNames)) {
             foreach ($_FILES['files']['name'] as $key => $val) {
                 // File upload path
                 $thumb_image = basename($_FILES['files']['name'][$key]);
-                $targetFilePath = $targetDir . $thumb_image;
+                $targetFilePath = $basePath ."/project_image/". $thumb_image;
 
                 // Check whether file type is valid
                 $fileType = pathinfo($targetFilePath, PATHINFO_EXTENSION);
@@ -96,17 +81,47 @@
         }
 
         // Display status message
-        $html = '<div class="center">
-                ' . $icon . '
-                <h5>' . $statusMsg . '</h5>
-                <p>redirecting in 5<i>seconds...</i></p>
-            </div>';
-        echo $html;
-        header("refresh:4;url=../" . strtolower($project_type) . ".php");
+        $redirectUrl = "../index.php";
+
+      $html = '
+<div class="center">
+    ' . $icon . '
+    <h5>' . $statusMsg . '</h5>
+    <button onclick="window.location.href=\'' . $redirectUrl . '\'" style="
+        margin-top: 15px;
+        padding: 10px 20px;
+        font-size: 16px;
+        background-color: #007BFF;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    ">
+        Go Back
+    </button>
+</div>';
+echo $html;
     }
 
     ?>
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+    <!-- Materialize CSS -->
+    <link rel="stylesheet" href="../css/materialize.css">
+    <link rel="stylesheet" href="../css/styles.css">
+
+    <!-- CDN Links & JS -->
+    <script src="../js/materialize.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+
+    <title>Dashboard | Shibpur Sristi</title>
+</head>
+
+<body>
+ 
 </body>
 
 </html>

@@ -42,7 +42,7 @@
                             <input type="text" name="prj_name" placeholder="Project Name" class="validate">
                         </div>
                         <div class="input-field">
-                            <input type="text" name="prj_date" placeholder="Date" class="datepicker">
+                            <input type="text" name="prj_date" placeholder="Write date in this format 2014-06-04" class="validate">
                         </div>
                         <div class="input-field">
                             <input type="text" name="place" placeholder="Project Location" class="validate">

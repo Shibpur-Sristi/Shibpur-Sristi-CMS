@@ -44,13 +44,11 @@
                                     <option value="Event">Events</option>
                                     <option value="Relief">Relief</option>
                                 </select>
-                                <label>Select Project Type</label>
                             </div>
                             <div class="input-field col s12 m6">
                                 <select id="project" name="project" class="browser-default">
                                     <option value="" disabled selected>Choose Project</option>
                                 </select>
-                                <label>Select Project</label>
                             </div>
                             <div class="input-field col s12">
                                 ADD Images: Please select image as size 570*350 <br>
@@ -71,62 +69,70 @@
     <?php include './includes/scripts.php'; ?>
 
     <script>
-    var projects = [];
+        let projects = [];
 
-    // Ensure that the API returns the right data
-    function fetchProjects() {
-        doAjax('api/api_projects.php', 'GET', { project: '' })
-            .then(response => {
-                console.log("API Response:", response); // Debugging: Log the response to check the data
-                try {
-                    var data = JSON.parse(response);
-                    if (data.statusCode === 200) {
-                        projects = data.data || []; // Make sure we handle empty or missing 'data'
-                        console.log("Projects Loaded:", projects); // Debugging: Log projects to ensure they are loaded
-                    } else {
-                        console.error("No projects found:", data.msg); // Handle case where no projects are returned
-                    }
-                } catch (error) {
-                    console.error("Error parsing API response:", error); // Catch and log any JSON parsing errors
+// Function to fetch projects from the API
+function fetchProjects() {
+    doAjax('api/api_projects.php', 'GET', {})
+        .then(response => {
+            console.log("API Response:", response); // Debugging: Log the response to check the data
+            try {
+                const parsedResponse = response; // Parse response as JSON
+                if (parsedResponse.statusCode === 200 && parsedResponse.data) {
+                    projects = parsedResponse.data; // Assign projects from API
+                    console.log("Projects Loaded:", projects); // Debugging: Log loaded projects
+                } else {
+                    console.error("Error: No projects found or invalid response:", parsedResponse.msg);
                 }
-            })
-            .catch(error => {
-                console.error('Error fetching projects:', error); // Log if there is an error in the AJAX request
-            });
+            } catch (error) {
+                console.error("Error parsing API response:", error); // Log JSON parsing errors
+            }
+        })
+        .catch(error => {
+            console.error("Error fetching projects:", error); // Log AJAX request errors
+        });
+}
+
+// Populate the project dropdown based on the selected type
+function populate() {
+    const projectType = document.getElementById('project-type').value;
+    const projectDropdown = document.getElementById('project');
+    console.log("projectType",projectType);
+    // Reset project dropdown
+    projectDropdown.innerHTML = "<option value='' disabled selected>Choose Project</option>";
+
+    // Filter projects by the selected type and populate options
+    const filteredProjects = projects.filter(project => project.type === projectType);
+    if (filteredProjects.length > 0) {
+        filteredProjects.forEach(project => {
+            const option = document.createElement('option');
+            option.value = project.name;
+            option.textContent = project.name;
+            projectDropdown.appendChild(option);
+        });
+
+        // Reinitialize Materialize dropdown
+        M.FormSelect.init(projectDropdown);
+    } else {
+        console.warn("No projects available for the selected type.");
     }
+}
 
-    // Populate the project options based on the selected project type
-    const populate = () => {
-        const projectType = document.getElementById('project-type');
-        const projectOption = document.getElementById('project');
-        projectOption.innerHTML = "<option value='' disabled selected>Choose Project</option>"; // Reset options
+// Initialize the page and fetch projects when the document is ready
+document.addEventListener('DOMContentLoaded', function () {
+    // Initialize Materialize dropdowns
+    const selects = document.querySelectorAll('select');
+    M.FormSelect.init(selects);
 
-        if (projects.length > 0 && projectType.value) {
-            let optionArr = projects.filter(project => project.type === projectType.value).map(project => project.name);
-            
-            // Add options to project select
-            optionArr.forEach(option => {
-                let newOption = document.createElement('option');
-                newOption.value = option;
-                newOption.innerHTML = option;
-                projectOption.appendChild(newOption);
-            });
+    // Fetch projects
+    fetchProjects();
+});
 
-            // Reinitialize the select field to update the Materialize dropdown
-            M.FormSelect.init(projectOption);
-        } else {
-            console.warn("No projects found for the selected type.");
-        }
-    };
-
-    // Initialize the page and fetch projects when the document is ready
-    document.addEventListener('DOMContentLoaded', function() {
-        fetchProjects(); // Fetch the projects first
-    });
-
-    // Firebase authentication check
-    auth.onAuthStateChanged(user => {
-        if (!user) {
-            window.location = "login.php"; // Redirect to login if user is not authenticated
-        }
+// Firebase authentication check
+auth.onAuthStateChanged(user => {
+    if (!user) {
+        window.location = "login.php"; // Redirect to login if user is not authenticated
     }
+});
+
+    </script>

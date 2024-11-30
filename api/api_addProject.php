@@ -24,16 +24,15 @@ try {
         $short_desc = str_replace(["'", "\""], ["\'", "\\\""], $short_desc);
         $long_desc = str_replace(["'", "\""], ["\'", "\\\""], $long_desc);
 
-        // Define the base path and folder
-        $basePath = "/home/tkhuygsu/public_html/admin/sristi_page/project_image/";
-        $projectFolder = $basePath . $prj_name;
-
-        // Check if folder exists, if not, create it
+        // $basePath = "in db.php";
+        
+        $projectFolder = $basePath ."/project_gallary/" . $prj_name;
         if (!is_dir($projectFolder)) {
             mkdir($projectFolder, 0755, true); // Recursive directory creation
         }
 
-        $targetDir = $basePath . $prj_name . "/";
+        $targetDir = $basePath ."/project_image/";
+        
         $statusMsg = $errorMsg = $insertValuesSQL = $errorUpload = $errorUploadType = $icon = '';
         $fileNames = array_filter($_FILES['files']['name']); // Get all file names
 
@@ -76,16 +75,27 @@ try {
             $statusMsg = 'Please select a file to upload.';
         }
 
-        // Redirect after 5 seconds using absolute URL
-        header("Location: http://cms.shibpursristi.in/".strtolower($project_type).".php");
-        exit(); // Ensure no further code is executed after redirect
+          // Display status message
+        $redirectUrl = "../index.php";
 
-        // Display status message before redirect
-        echo '<div class="center">
-                '.$icon.'
-                <h5>'.$statusMsg.'</h5>
-                <p>Redirecting in <i>5</i> seconds...</p>
-            </div>';
+      $html = '
+<div class="center">
+    ' . $icon . '
+    <h5>' . $statusMsg . '</h5>
+    <button onclick="window.location.href=\'' . $redirectUrl . '\'" style="
+        margin-top: 15px;
+        padding: 10px 20px;
+        font-size: 16px;
+        background-color: #007BFF;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    ">
+        Go Back
+    </button>
+</div>';
+echo $html;
 
     }
 } catch (Exception $e) {
